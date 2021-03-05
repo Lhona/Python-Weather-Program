@@ -9,4 +9,6 @@ from GLOB_VAR import name_City
 from GLOB_VAR import chosen_units
 from Slug_Functions import *
 
+#main function
+#after that, it's all functions all the way down.
 main_menu()
