@@ -17,6 +17,9 @@ def menuloop():
             #jumps to function that prints and ends the script.
             endprogram()
             break
+        elif user_entry == "KEY":
+            print("Thank you for entering your API key. Please copy and hit CTRL+V on your keyboard when prompted.")
+            key = input("Enter API Key: ")
         else:
             print("Not a valid entry, try again.")
             continue
@@ -75,12 +78,13 @@ def find_choice():
             continue
 #this one constructs our URL based on several global values being defined.
 def construct_URL():
-    comp_URL = uRL + "appid=" + key + "&q=" + local_choice + unit_Choice
+    comp_URL = uRL + "appid=" + str(key) + "&q=" + str(name_City) + str(chosen_units)
+    ping(comp_URL)
 
 #here comes the fun part.
 #A ping to the server to ensure that we have a connection, otherwise it jumps you a menu.
 #this is called at the beginning of each weather_find_x function.
-def ping_server():
+def ping_server(comp_URL):
     try:
         status_data = requests.get(comp_URL)
     except:
@@ -92,9 +96,16 @@ def ping_server():
     return
 #try block to see if the user entered a valid city/zipcode in. if not, it sends them back to find_choice
 def check_valid_entry():
-    validtest = weather_data['cod']
-    if validtest == "404":
+    try:
+        validtest = weather_data['cod']
+        if validtest == "404":
         print("Not a valid entry, try again")
+    except:
+        print("Your entry is valid, proceeding.")
+        data_collect()
+    else:
+
+def data_collect()
 
 
 
