@@ -2,9 +2,14 @@
 #fall like a domino stack
 import requests
 import os
+from GLOB_VAR import zipcode
+from GLOB_VAR import key
+from GLOB_VAR import uRL
+from GLOB_VAR import name_City
+from GLOB_VAR import chosen_units
 
 #the start of everything
-def menuloop():
+def main_menu():
     #usual while, if, loop that error checks and sends the input to the next function
     user_entry = ''
     print("===============")
@@ -26,7 +31,7 @@ def menuloop():
         elif user_entry == "KEY":
             print("Thank you for entering your API key. Please copy and hit CTRL+V on your keyboard when prompted.")
             key = input("Enter API Key: ")
-            break
+            continue
         elif user_entry == "RECALL":
             print("Enter a previously saved filename to redisplay the weather with date and time.")
             data_recall()
@@ -48,17 +53,17 @@ def choose_units():
         if user_entry == "C":
             print("Units will be displayed in metric.")
             chosen_units = "&units=metric"
-            find_choice()
+            find_choice(chosen_units)
             break
         elif user_entry == "F":
             print("Units will be displayed in imperial")
             chosen_units = "&units=imperial"
-            find_choice()
+            find_choice(chosen_units)
             break
         elif user_entry == "K":
             print("Units will be displayed in kelvin, the default value.")
             chosen_units = ''
-            find_choice()
+            find_choice(chosen_units)
             break
         else:
             print("Not a valid entry, try again.")
@@ -68,7 +73,7 @@ def choose_units():
 #finding the city would be easier, as it sets the search method values as city
 #or zipcode. Much easier IMO. Though with the amount of IF statements, I could've
 #used a dictionary to use a .get method instead...
-def find_choice():
+def find_choice(set_units):
     user_entry = ''
     print("======================")
     print("===CITY AND ZIPCODE===")
@@ -82,17 +87,17 @@ def find_choice():
             print("You have chosen to use the city name as the identifier.\nPlease input the city name.")
             name_City = input("Enter City Name:")
             print("You have input the city " + str(name_City))
-            construct_URL(name_City)
+            construct_URL(name_City, set_units)
             break
         elif user_entry == "ZIPCODE":
             print("You have chosen to use the zipcode as the identifier.\nPlease input the zipcode.")
             zipcode = input("Enter Zipcode:")
             print("You have input the zipcode " + str(zipcode))
-            construct_URL(zipcode)
+            construct_URL(zipcode, set_units)
             break
         elif user_entry == "BACK":
             print("Returning to main menu...")
-            menuloop()
+            main_menu()
             break
         else:
             print("Not a valid entry, please try again.")
@@ -101,8 +106,16 @@ def find_choice():
 
 
 #this one constructs our URL based on several global values being defined.
-def construct_URL(locale_choice):
-    comp_URL = uRL + "appid=" + str(key) + "&q=" + str(locale_choice) + str(chosen_units)
+def construct_URL(locale_choice, set_units):
+    if key == '':
+        print("You have not entered an API Key, please enter one in now.")
+        key = input("Enter API Key:")
+    else:
+        if set_units == "STANDARD":
+            set_units = ''
+        else:
+            set_units = set_units
+    comp_URL = str(uRL) + "appid=" + str(key) + "&q=" + str(locale_choice) + str(set_units)
     ping_server(comp_URL) #passes comp_URL to ping_server() function
 
 #here comes the fun part.
@@ -113,7 +126,7 @@ def ping_server(comp_URL): #receives URL to ensure that we have a status 200.
         status_data = requests.get(comp_URL)
     except:
         print("There's  been an error with the connection.\nReturning to Main Menu.")
-        menuloop()
+        main_menu()
         #jumps back to main menu
     else:
         print("No Connection Errors.\nProceeding with data request.")
@@ -128,6 +141,10 @@ def check_valid_entry(comp_URL):
     if validtest == "200":
         print("Your entry is valid, proceeding.")
         data_collect(comp_URL)#how many times is a variable passed through a function
+                              #before it starts to question its purpose in life.
+    elif validtest == "401"
+        print("Your API key is invalid, please re-enter your key in the main menu.")
+        main_menu()
     else: #duh, this works. Unless it's a really specific one like 501 or the like.
         print("Not a valid entry, returning to city and zipcode choice menu.")
         find_choice()
@@ -143,24 +160,45 @@ def data_collect(comp_URL):
     data_write(tmp_K, feels, w_Speed, humid, desc)
 
 def data_write(tmp_K, feels, w_Speed, humid, desc):
-    if chosen_units == "&units=celsius":
-        new_units = "°C"
-    elif chosen_units == "&units=fahrenheit":
-        new_units = "°C"
+    if chosen_units == "&units=metric":
+        temp_units = "°C"
+        vel_units = "MPS (Meter Per Second)"
+    elif chosen_units == "&units=imperial":
+        temp_units = "°F"
+        vel_units = "MPH"
+    elif chosen_units == "Standard":
+        temp_units = "°K"
+        vel_units = "MPS (Meter Per Second)"
+
     print("You'll need to enter a filename without an extension.")
     new_File = input("Enter a filename to write weather data to-\nYou do not need to include an extension:") + ".txt"
     active_File = open(new_File, "w+")
     active_File.write()
-    active_File.write("Temperature is " + str(tmp_K) + new_units + "\n")
-    active_File.write("Temperature feels like " + str(feels) + str(new_units) + "\n")
-    active_File.write("Wind speed is " + str(w_Speed) + " MPH" + "\n")
+    active_File.write("Temperature is " + str(tmp_K) + str(temp_units) + "\n")
+    active_File.write("Temperature feels like " + str(feels) + str(temp_units) + "\n")
+    active_File.write("Wind speed is " + str(w_Speed) + " " + str(vel_units) + "\n")
     active_File.write("A brief description of the weather is: " + str(desc) + "\n")
     active_File.write("Humidity is " + str(humid) + "%" + "\n")
     active_File.close()
     data_question()
 
-
-
+def data_question(): #this is the "You wanna read or go back to the menu?"
+    print("Would you like to read your data or go back to the main menu?")
+    print("Enter [READ] to read written data from file or [BACK] to return to menu.")
+    user_entry = ''
+    while user_entry != "BACK":
+        user_entry = input("Enter choice:")
+        if user_entry == "READ":
+            print("Data is being displayed...")
+            data_recall()
+            break
+        elif user_entry == "BACK":
+            print("Taking user back to main menu...")
+            main_menu()
+            break
+        else:
+            print("Not a valid entry, try again.")
+            continue
 
 def data_recall():
     print("Enter the name a of a previous file without the extension")
@@ -168,7 +206,7 @@ def data_recall():
     active_File = open(new_File, "r")
     file_read = active_File.read()
     print(file_read)
-    menuloop()
+    main_menu()
 
 
 
@@ -180,7 +218,7 @@ def question_loop():
     while user_entry != "NO":
         user_entry = input("Enter: ")
         if user_entry == "YES"
-            menuloop()
+            main_menu()
             break
         elif user_entry == "NO"
             endprogram()

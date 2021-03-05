@@ -6,4 +6,7 @@ from GLOB_VAR import zipcode
 from GLOB_VAR import key
 from GLOB_VAR import uRL
 from GLOB_VAR import name_City
+from GLOB_VAR import chosen_units
 from Slug_Functions import *
+
+main_menu()
