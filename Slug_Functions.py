@@ -28,10 +28,11 @@ def main_menu():
             endprogram()
             break
             #this was from a push with the key in the script. Didn't realize how bad it would've been had it not been for GitGuard.
-        elif user_entry == "KEY":
-            print("Thank you for entering your API key. Please copy and hit CTRL+V on your keyboard when prompted.")
-            key = input("Enter API Key: ")
-            continue
+#        elif user_entry == "KEY":
+#            print("Thank you for entering your API key. Please copy and hit CTRL+V on your keyboard when prompted.")
+#            key = input("Enter API Key: ")
+#            continue
+#Got an UnboundLocalError referencing it earlier in a different setup. Forcing the user through the process is easier than going back for it.
         elif user_entry == "RECALL":
             print("Enter a previously saved filename to redisplay the weather with date and time.")
             data_recall()
@@ -50,12 +51,12 @@ def choose_units():
     while user_entry != "BACK":
         print("Please choose between the two measurement systems:\n[M] for metric.\n[I] for imperial.\n[K] for Kelvin.")
         user_entry = input("Enter: ")
-        if user_entry == "C":
+        if user_entry == "M":
             print("Units will be displayed in metric.")
             chosen_units = "&units=metric"
             find_choice(chosen_units)
             break
-        elif user_entry == "F":
+        elif user_entry == "I":
             print("Units will be displayed in imperial")
             chosen_units = "&units=imperial"
             find_choice(chosen_units)
@@ -107,14 +108,12 @@ def find_choice(set_units):
 
 #this one constructs our URL based on several global values being defined.
 def construct_URL(locale_choice, set_units):
-    if key == '':
-        print("You have not entered an API Key, please enter one in now.")
-        key = input("Enter API Key:")
+    print("Before you can continue, please enter your API Key to connect properly.")
+    key = input("Enter API Key:")
+    if set_units == "STANDARD":
+        set_units = ''
     else:
-        if set_units == "STANDARD":
-            set_units = ''
-        else:
-            set_units = set_units
+        set_units = set_units
     comp_URL = str(uRL) + "appid=" + str(key) + "&q=" + str(locale_choice) + str(set_units)
     ping_server(comp_URL) #passes comp_URL to ping_server() function
 
@@ -142,7 +141,7 @@ def check_valid_entry(comp_URL):
         print("Your entry is valid, proceeding.")
         data_collect(comp_URL)#how many times is a variable passed through a function
                               #before it starts to question its purpose in life.
-    elif validtest == "401"
+    elif validtest == "401":
         print("Your API key is invalid, please re-enter your key in the main menu.")
         main_menu()
     else: #duh, this works. Unless it's a really specific one like 501 or the like.
@@ -185,6 +184,7 @@ def data_write(tmp_K, feels, w_Speed, humid, desc):
 def data_question(): #this is the "You wanna read or go back to the menu?"
     print("Would you like to read your data or go back to the main menu?")
     print("Enter [READ] to read written data from file or [BACK] to return to menu.")
+    print("Enter QUIT to end the program.")
     user_entry = ''
     while user_entry != "BACK":
         user_entry = input("Enter choice:")
@@ -196,6 +196,10 @@ def data_question(): #this is the "You wanna read or go back to the menu?"
             print("Taking user back to main menu...")
             main_menu()
             break
+        elif user_entry == "QUIT":
+            print("Quitting the program...")
+            endprogram()
+            break;
         else:
             print("Not a valid entry, try again.")
             continue
@@ -206,26 +210,10 @@ def data_recall():
     active_File = open(new_File, "r")
     file_read = active_File.read()
     print(file_read)
-    main_menu()
+    data_question()
 
 
 
-
-def question_loop():
-    #similar to menu loop, just asks the user if they're interested in trying again
-    print("Would you like to start over again?\nType {YES} or {NO}.")
-    user_entry = ''
-    while user_entry != "NO":
-        user_entry = input("Enter: ")
-        if user_entry == "YES"
-            main_menu()
-            break
-        elif user_entry == "NO"
-            endprogram()
-            break
-        else:
-            print("Not a valid entry, try again.")
-            continue
 
 def endprogram():
     print("Thank you for using the weather request program!")
