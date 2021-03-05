@@ -1,0 +1,78 @@
+===============
+===MAIN MENU===
+===============
+Welcome to the weather reporting program.
+Before we start, we need to know what kind of
+measuring units you use.
+Please type [CONTINUE] to go on or [QUIT] to end the program.
+Also type [RECALL] to print out the data of a previous weather report.
+=======================
+===MEASUREMENT UNITS===
+=======================
+Please choose between the two measurement systems:
+[M] for metric.
+[I] for imperial.
+[K] for kelvin.
+Units will be displayed in metric.
+======================
+===CITY AND ZIPCODE===
+======================
+Please choose between the two location methods:
+[CITY]
+[ZIPCODE]
+[COMBINE] - Enter both City then Zipcode.
+You can combine both city and zipcode to get a more accurate location.
+Enter City Name:
+Enter Zipcode
+You have entered Huntsville,35811
+======================
+===URL CONSTRUCTION===
+======================
+Before you can continue, please enter your API Key to connect properly.
+=================
+===SERVER PING===
+=================
+No Connection Errors.
+Proceeding with data request.
+================
+===VALIDATION===
+================
+Your entry is valid, proceeding.
+You'll need to enter a filename without an extension.
+The file Test_File.txt has been created.
+Writing data to file...
+Writing data...
+Writing data...
+Writing data...
+Done.
+
+==============
+===END MENU===
+==============
+Would you like to read your data or go back to the main menu?
+Enter [READ] to read written data from file or [BACK] to return to menu.
+Enter QUIT to end the program.
+Data is being displayed...
+==================
+===TOTAL RECALL===
+==================
+Enter the name a of a previous file without the extension.
+
+Test_File.txt is being displayed.
+
+The time and date is: Fri Mar  5 10:18:10 2021
+The location is Huntsville, US
+Temperature is 11.78°C
+Temperature feels like 5.64°C
+Wind speed is 5.14 MPS (Meter Per Second)
+A brief description of the weather is: clear sky
+Humidity is 32%
+
+==============
+===END MENU===
+==============
+Would you like to read your data or go back to the main menu?
+Enter [READ] to read written data from file or [BACK] to return to menu.
+Enter QUIT to end the program.
+Quitting the program...
+Thank you for using the weather request program!

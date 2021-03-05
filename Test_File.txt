@@ -1,0 +1,7 @@
+The time and date is: Fri Mar  5 10:18:10 2021
+The location is Huntsville, US
+Temperature is 11.78°C
+Temperature feels like 5.64°C
+Wind speed is 5.14 MPS (Meter Per Second)
+A brief description of the weather is: clear sky
+Humidity is 32%
